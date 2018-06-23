@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdio.h>
 
 #define INIT_CAPACITY 100
 #define TRUE 1
