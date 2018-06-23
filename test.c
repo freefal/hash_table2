@@ -3,7 +3,7 @@
 #include <time.h>
 #include "hash_table.h"
 
-#define ITERS 1000000
+#define ITERS 100000000
 
 // Performance test hash table implementations
 int main(void) {
@@ -18,7 +18,7 @@ int main(void) {
 	for (i = 0; i < ITERS; i++) {
             key_t key = rand();
             value_t value = rand();
-            hash_item_t item = { key, value };
+            hash_item_t item = { .key = key, .value = value };
 	    ht_insert(ht, item);
 	}
 	end = clock();
@@ -33,7 +33,7 @@ int main(void) {
             key_t key = rand();
 	    value_t value = ht_lookup(ht, key);
             if (value != EMPTY) {
-                printf("{%lu, %lu}", key, value);
+                printf("{%lu, %lu}\n", key, value);
                 successful_lookups++;
             }
 	}
@@ -41,6 +41,6 @@ int main(void) {
 	micros = end - start;
 	millis = micros / 1000;
 	printf("Took %fms to perform %d lookups\n", millis, ITERS);
-        printf("Successfully lookuped up %d keys of %d attempts", successful_lookups, ITERS);
+        printf("Successfully lookuped up %d keys of %d attempts\n", successful_lookups, ITERS);
 	return 0;
 }
