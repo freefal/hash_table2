@@ -2,23 +2,32 @@
 #include "hash_table.h"
 
 void ht_resize (hash_table_t* ht) {
+    //printf("start resize: %lu, %lu\n", ht->num_items, ht->capacity);
+    //fflush(stdout);
     capacity_t new_capacity = ht->capacity * 2;
     hash_table_t* ht_new = ht_create_capacity(new_capacity);
     
     int i;
-    printf("resizing..\n");
+    //int count1 = 0;
+    //int count2 = 0;
     for (i = 0; i < ht->capacity; i++) {
+        //count2++;
         if (ht->items[i].exists) {
-            printf("%d\n", i);
+            //count1++;
             ht_insert(ht_new, ht->items[i]); 
         }
     }
-    
+    //printf("Iterated over %d\n items\n", count2);
+    //printf("Attempted to insert %d\n items\n", count1);
+            
     free(ht->items);
     ht->items = ht_new->items;
     ht->capacity = ht_new->capacity;
     ht->num_items = ht_new->num_items;
 
+    free(ht_new);
+    //printf("end resize: %lu, %lu\n", ht->num_items, ht->capacity);
+    //fflush(stdout);
     return;
 }
 
@@ -31,7 +40,7 @@ hash_table_t* ht_create () {
 }
 
 hash_table_t* ht_create_capacity (capacity_t init_capacity) {
-    hash_item_t* items = calloc (INIT_CAPACITY, sizeof(hash_item_t));
+    hash_item_t* items = calloc (init_capacity, sizeof(hash_item_t));
     hash_table_t* ht = malloc (sizeof(hash_table_t));
     ht->items = items;
     ht->capacity = init_capacity;
@@ -43,13 +52,13 @@ int ht_insert (hash_table_t* ht, hash_item_t item) {
     item.exists = 1;
     hash_index_t index = hash(item.key) % (ht->capacity);
     while (true) {
-        hash_item_t existing_item = ht->items[index];
-        if (!existing_item.exists) {
+        hash_item_t current_item = ht->items[index];
+        if (!current_item.exists) {
             ht->items[index] = item;
             ht->num_items++;
             break;
         }
-        else if (existing_item.key == item.key) {
+        else if (current_item.key == item.key) {
             ht->items[index] = item;
             break;
         }
