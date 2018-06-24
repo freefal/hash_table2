@@ -32,7 +32,7 @@ void ht_resize (hash_table_t* ht) {
 }
 
 hash_index_t hash (key_t key) {
-    return key;
+    return (key+528042)*key;
 }
 
 hash_table_t* ht_create () {
